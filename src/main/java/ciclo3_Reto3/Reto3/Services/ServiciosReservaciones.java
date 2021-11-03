@@ -4,10 +4,18 @@
  */
 package ciclo3_Reto3.Reto3.Services;
 
+import ciclo3_Reto3.Reto3.Controller.custom.CountClient;
+import ciclo3_Reto3.Reto3.Controller.custom.StatusAmount;
 import ciclo3_Reto3.Reto3.Model.Reservaciones;
 import ciclo3_Reto3.Reto3.Repository.RepositorioReservaciones;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,4 +80,35 @@ public class ServiciosReservaciones {
         }).orElse(false);
         return aBoolean;
     }
+    
+    public StatusAmount getStatusReport() {
+        List<Reservaciones> completed = metodosCrud.getReservationByStatus("completed");
+        List<Reservaciones> cancelled = metodosCrud.getReservationByStatus("cancelled");
+
+        return new StatusAmount(completed.size(), cancelled.size());
+        
+    }
+    
+    public List<Reservaciones> getReservationPeriod(String d1, String d2) {
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
+        
+        Date dateOne = new Date();
+        Date dateTwo = new Date();
+        try {
+            dateOne = parser.parse(d1);
+            dateTwo = parser.parse(d2);
+        } catch (ParseException e) {
+        }
+        if (dateOne.before(dateTwo)) {
+            return metodosCrud.getReservationByPeriod(dateOne, dateTwo);
+        } else {
+            return new ArrayList<>();
+        }
+
+    }
+    
+        public List<CountClient> getTopClient() {
+        return metodosCrud.getTopClient();
+    }
+    
 }

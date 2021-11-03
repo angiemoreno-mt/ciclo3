@@ -42,19 +42,25 @@ public class ServiciosMensaje {
     }
 
     public Mensaje update(Mensaje message){
-        if(message.getIdMessage()!=null){
-            Optional<Mensaje> e= metodosCrud.getMessage(message.getIdMessage());
-            if(!e.isEmpty()){
-                if(message.getMessageText()!=null){
+        if (message.getIdMessage() != null) {
+            return metodosCrud.save(message);
+        } else {
+            Optional<Mensaje> e = metodosCrud.getMessage(message.getIdMessage());
+            if (!e.isEmpty()) {
+                if (message.getMessageText() != null) {
                     e.get().setMessageText(message.getMessageText());
                 }
-                metodosCrud.save(e.get());
+                if (message.getClient() != null) {
+                    e.get().setClient(message.getClient());
+                }
+                if (message.getSkate() != null) {
+                    e.get().setSkate(message.getSkate());
+                }
+
                 return e.get();
-            }else{
+            } else {
                 return message;
             }
-        }else{
-            return message;
         }
     }
 
