@@ -107,7 +107,7 @@ public class ServiciosReservaciones {
 
     }
     
-        public List<CountClient> getTopClient() {
+    public List<CountClient> getTopClient() {
         return metodosCrud.getTopClient();
     }
     
